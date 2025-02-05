@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/login', { email, password });
+      const token = response.data.token;
       alert('User logged in successfully');
-      console.log('Token:', response.data.token);
+      router.push({
+        pathname: '/home',
+        query: { token },
+      });
     } catch (error) {
       alert('Login failed');
     }
